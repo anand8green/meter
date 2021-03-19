@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import axios from 'axios';
 import moment from 'moment';
+import { useRouter } from 'next/router'
 
 export default function index() {
-
+  const router = useRouter()
   // AUTH STATE
   const [account, setaccount] = useState("")
   const [postcode, setpostcode] = useState("")
@@ -51,7 +52,6 @@ export default function index() {
       })
         .catch(err => {
           console.log(err)
-          console.log("there is error");
           setErro(true)
 
         })
@@ -64,36 +64,41 @@ export default function index() {
     e.preventDefault()
     console.log("electric submit");
 
-    // axios.post(`https://api.core.green.energy/properties/${account}/no-token/readings`, {
-    //   email: email,
-    //   postcode: postcode,
-    //   type: "electric",
-    //   reading: {
-    //     mpan: mpan,
-    //     date: today,
-    //     value: elec,
-    //     serial: elecserial,
-    //     registerId: "1"
-    //   }
-    // })
+    axios.post(`https://api.core.green.energy/properties/${account}/no-token/readings`, {
+      email: email,
+      postcode: postcode,
+      type: "electric",
+      reading: {
+        mpan: mpan,
+        date: today,
+        value: elec,
+        serial: elecserial,
+        registerId: "1"
+      }
+    }).then(res => {
+      console.log(res);
+      router.push("/thanks")
+    })
 
   }
 
   const gasSubmit = (e) => {
     e.preventDefault()
-    console.log("gas submit");
 
-    // axios.post(`https://api.core.green.energy/properties/${account}/no-token/readings`, {
-    //   email: email,
-    //   postcode: postcode,
-    //   type: "gas",
-    //   reading: {
-    //     mprn: mprn,
-    //     date: today,
-    //     value: gas,
-    //     serial: gasserial
-    //   }
-    // })
+    axios.post(`https://api.core.green.energy/properties/${account}/no-token/readings`, {
+      email: email,
+      postcode: postcode,
+      type: "gas",
+      reading: {
+        mprn: mprn,
+        date: today,
+        value: gas,
+        serial: gasserial
+      }
+    }).then(res => {
+      console.log(res);
+      router.push("/thanks")
+    })
 
   }
 
@@ -116,14 +121,15 @@ export default function index() {
             !isUser &&
             <div className="auth">
               <p className="error" style={{ opacity: isErro ? 1 : 0 }} >Please check your details</p>
-              <form className="form">
+              <form className="form" onSubmit={handleSubmit}>
                 <label htmlFor="">Account Number * </label>
-                <input required type="text" name="account_number" value={account} onChange={(e) => setaccount(e.target.value)} required />
+                <input type="text" name="account_number" value={account} onChange={(e) => setaccount(e.target.value)} required />
                 <label htmlFor="">Supply Postcode * </label>
-                <input required type="text" name="postcode" value={postcode} onChange={(e) => setpostcode(e.target.value)} />
+                <input type="text" name="postcode" value={postcode} onChange={(e) => setpostcode(e.target.value)} required />
                 <label htmlFor="">Email on Account * </label>
-                <input required type="email" name="email" value={email} onChange={(e) => setemail(e.target.value)} />
-                <input type="submit" className="submitBtn" onClick={handleSubmit} />
+                <input type="email" name="email" value={email} onChange={(e) => setemail(e.target.value)} required />
+                <input type="submit" className="submitBtn" />
+
               </form>
             </div>
           }
