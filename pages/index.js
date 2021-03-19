@@ -3,6 +3,8 @@ import axios from 'axios';
 import moment from 'moment';
 import { useRouter } from 'next/router'
 
+console.log(process.env.PORT);
+
 export default function index() {
   const router = useRouter()
   // AUTH STATE
