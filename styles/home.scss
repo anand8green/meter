@@ -141,7 +141,8 @@ label {
 }
 
 .main {
-    margin: 0;
+
+    margin: 0 0 5rem 0;
     padding: 2rem;
     color: #4B494B;
     display: flex;
@@ -150,6 +151,16 @@ label {
 
     .auth {
         width: 100%;
+
+        .error {
+            color: red;
+            margin: 2.4rem 0;
+            font-size: 1.2rem;
+            font-weight: bolder;
+
+        }
+
+        ;
 
         form {
             //  padding: 2rem;
@@ -161,5 +172,41 @@ label {
             }
 
         }
+    }
+}
+
+.footer {
+    color: white;
+    border-top: 1px solid #d6d6d6;
+    // border: 10px solid black;
+    // border-color: brown;
+    padding: 1rem 0;
+    min-height: 10rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @media (max-width: 700px) {
+        min-height: 20rem;
+    }
+
+    .logo {
+        overflow: hidden;
+        padding: 2rem 3rem;
+
+        @media (max-width: 700px) {
+            display: flex;
+            justify-content: center;
+        }
+
+        .logoPic {
+            width: 11rem;
+        }
+    }
+
+    p {
+        padding-right: 3rem;
+        color: gray;
+        font-family: Thin !important;
     }
 }

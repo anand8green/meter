@@ -9,12 +9,11 @@ export default function index() {
   const [postcode, setpostcode] = useState("")
   const [email, setemail] = useState("")
   const [isUser, setUser] = useState(false)
+  const [isErro, setErro] = useState(false)
 
   // SELECT STATE
 
   const [selectOption, setSelectOption] = useState('Electric')
-
-  console.log(selectOption);
 
   // GAS INFOMATION
   const today = moment();
@@ -33,21 +32,30 @@ export default function index() {
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    axios.post(`https://api.core.green.energy/properties/${account}/no-token/meters`, {
-      email: email,
-      postcode: postcode
-    }).then(res => {
-      console.log(res)
+    console.log(isUser);
 
-      if (res.statusText === "OK") {
-        setUser(true),
-          setgasserial(res.data.data.gas[0].serial),
-          setmprn(res.data.data.gas[0].mprn),
-          setelecserial(res.data.data.electric[0].serial),
-          setmpan(res.data.data.electric[0].mpan)
-      }
-    })
-      .catch(err => console.log(err))
+    if (account && postcode && email) {
+      axios.post(`https://api.core.green.energy/properties/${account}/no-token/meters`, {
+        email: email,
+        postcode: postcode
+      }).then(res => {
+        console.log(res)
+
+        if (res.statusText === "OK") {
+          setUser(true),
+            setgasserial(res.data.data.gas[0].serial),
+            setmprn(res.data.data.gas[0].mprn),
+            setelecserial(res.data.data.electric[0].serial),
+            setmpan(res.data.data.electric[0].mpan)
+        }
+      })
+        .catch(err => {
+          console.log(err)
+          console.log("there is error");
+          setErro(true)
+
+        })
+    }
   }
 
   // METER SUMBIT
@@ -107,13 +115,14 @@ export default function index() {
           {
             !isUser &&
             <div className="auth">
+              <p className="error" style={{ opacity: isErro ? 1 : 0 }} >Please check your details</p>
               <form className="form">
-                <label htmlFor="">Account Number </label>
-                <input type="text" name="account_number" value={account} onChange={(e) => setaccount(e.target.value)} />
-                <label htmlFor="">Supply Postcode </label>
-                <input type="text" name="postcode" value={postcode} onChange={(e) => setpostcode(e.target.value)} />
-                <label htmlFor="">Email on Account </label>
-                <input type="email" name="email" value={email} onChange={(e) => setemail(e.target.value)} />
+                <label htmlFor="">Account Number * </label>
+                <input required type="text" name="account_number" value={account} onChange={(e) => setaccount(e.target.value)} required />
+                <label htmlFor="">Supply Postcode * </label>
+                <input required type="text" name="postcode" value={postcode} onChange={(e) => setpostcode(e.target.value)} />
+                <label htmlFor="">Email on Account * </label>
+                <input required type="email" name="email" value={email} onChange={(e) => setemail(e.target.value)} />
                 <input type="submit" className="submitBtn" onClick={handleSubmit} />
               </form>
             </div>
@@ -159,6 +168,15 @@ export default function index() {
 
         </div>
 
+        <div className="footer">
+          <div className="logo">
+            <img src="./logoGreen.svg" alt="" className="logoPic" />
+          </div>
+
+          <p>© 2020 Green Supplier Limited</p>
+
+        </div>
+
       </div>
-    </div>)
+    </div >)
 }
